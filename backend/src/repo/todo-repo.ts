@@ -3,7 +3,7 @@ import Todo from './../models/todo'
 
 interface TodoRepo {
     getTodos(): Promise<Array<ITodo>>
-    addTodos(todoBody: ITodo): Promise<ITodo>
+    addTodo(todoBody: ITodo): Promise<ITodo>
     updateTodo(id: string, todoBody: ITodo): Promise<ITodo | null>
     deleteTodo(id: string): Promise<ITodo | null>
 }
@@ -16,22 +16,21 @@ class TodoRepoImpl implements TodoRepo {
     }
 
     async getTodos(): Promise<Array<ITodo>> {
-        // TODO: Should get Todo from mongoDB
         return Todo.find()
     }
-    async addTodos(todoBody: ITodo): Promise<ITodo> {
-        // TODO: Should add Todo into mongoDB
+
+    async addTodo(todoBody: ITodo): Promise<ITodo> {
         return Todo.create(todoBody)
     }
 
     async updateTodo(id: string, todoBody: ITodo): Promise<ITodo | null> {
-         //TODO: Should update Todo to mongoDB
-         return Todo.findByIdAndUpdate(id, todoBody)
+        return Todo.findByIdAndUpdate(
+            id, todoBody, { new: true }
+        )
     }
 
     async deleteTodo(id: string): Promise<ITodo | null> {
-         //TODO: Should delete Todo from mongoDB
-         return Todo.findByIdAndDelete(id)
+        return Todo.findByIdAndDelete(id)
     }
 
 }

@@ -7,8 +7,9 @@ const TodoRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: 
     const todoRepo = TodoRepoImpl.of()
 
     interface IdParam {
-        id: string,
+        id: string
     }
+
     server.get('/todos', opts, async (request, reply) => {
         try {
             const todos: Array<ITodo> = await todoRepo.getTodos()
@@ -18,18 +19,18 @@ const TodoRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: 
             return reply.status(500).send(`[Server Error]: ${error}`)
         }
     })
-    
+
     server.post('/todos', opts, async (request, reply) => {
         try {
             const todoBody: ITodo = request.body as ITodo
-            const todo: ITodo = await todoRepo.addTodos(todoBody)
+            const todo: ITodo = await todoRepo.addTodo(todoBody)
             return reply.status(201).send({ todo })
         } catch (error) {
             console.error(`POST /todos Error: ${error}`)
             return reply.status(500).send(`[Server Error]: ${error}`)
         }
     })
-    
+
     server.put<{ Params: IdParam }>('/todos/:id', opts, async (request, reply) => {
         try {
             const id = request.params.id
@@ -45,7 +46,7 @@ const TodoRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: 
             return reply.status(500).send(`[Server Error]: ${error}`)
         }
     })
-    
+
     server.delete<{ Params: IdParam }>('/todos/:id', opts, async (request, reply) => {
         try {
             const id = request.params.id
@@ -60,10 +61,6 @@ const TodoRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: 
             return reply.status(500).send(`[Server Error]: ${error}`)
         }
     })
-
-
-    // TODO: Add CRUD endpoints, i.e. get, post, update, delete
-    // NOTE: the url should be RESTful
 
     done()
 }
